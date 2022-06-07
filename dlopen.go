@@ -16,6 +16,7 @@ import (
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"time"
 
 	greet "github.com/dolanor/sobed/clib"
 )
@@ -28,11 +29,37 @@ func load() {
 	}
 
 	fPath := filepath.Join(dirName, libName)
-	err = ioutil.WriteFile(fPath, greet.LibGreet, 0o600)
+	f, err := greet.LibGreet.Open(libName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("written in:", fPath)
+
+	b := make([]byte, 1_000_000)
+	_, err = f.Read(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//log.Println("data:", string(b))
+
+	fi, err := f.Stat()
+	// NOT POSSIBLE TO GET FD FROM EMBED
+	if err != nil {
+		log.Fatal(err)
+	}
+	_ = fi
+
+	//fi.Sys
+	//st := fi.Sys()
+
+	//log.Printf("%T - %+v\n", fi, fi)
+	time.Sleep(30 * time.Second)
+	return
+
+	//err = ioutil.WriteFile(fPath, greet.LibGreet, 0o600)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//log.Println("written in:", fPath)
 
 	lName := C.CString(fPath)
 	handle := C.dlopen(lName, C.RTLD_LAZY)

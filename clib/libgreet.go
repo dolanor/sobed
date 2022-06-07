@@ -1,7 +1,9 @@
 package greet
 
+import (
+	"embed"
+)
 import "C"
-import _ "embed"
 
 //go:embed libgreet.so
-var LibGreet []byte
+var LibGreet embed.FS
