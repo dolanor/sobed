@@ -1,8 +1,20 @@
 package main
 
-func main() {
-	load()
+import (
+	"fmt"
 
-	//g := Greet("lol")
-	//fmt.Println("greet:", g)
+	"github.com/dolanor/sobed/greet"
+)
+
+func main() {
+	greetFn, err := dislodgeAndDLOpen(greet.LibFS, "libgreet.so", "greet")
+	if err != nil {
+		panic(err)
+	}
+
+	greeter := CGreeter{
+		greetFn: greetFn,
+	}
+	greeting := greeter.Greet("World")
+	fmt.Println(greeting)
 }
