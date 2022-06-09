@@ -38,3 +38,4 @@ If you want to play with the libgreet C lib, you can just modify it in a clone a
 ```
 go generate ./greet
 ```
+
